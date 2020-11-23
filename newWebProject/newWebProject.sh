@@ -4,7 +4,8 @@ PROJECT_PATH="${HOME}/Documents/workspace/web/projects/${PROJECT}"
 WORDPRESS_TO_THEME="wp-content/themes"
 
 # PROCESS 
-# mkdir -p for all dir's in path
+open -j /Applications/MAMP/MAMP.app/
+
 mkdir ${PROJECT_PATH}
 
 git clone https://github.com/WordPress/WordPress.git ${PROJECT_PATH}
@@ -14,5 +15,10 @@ git clone https://github.com/dan-frank/swd_theme ${PROJECT}
 cd ${PROJECT_PATH}/${WORDPRESS_TO_THEME}/${PROJECT}
 
 npm i
+
+cd /Applications/MAMP/bin && ./start.sh
+cd /Applications/MAMP/bin && ./stop.sh
+
+# TODO Add ssh create table script for mamp
 
 echo "The ${PROJECT} project has been initiated!"

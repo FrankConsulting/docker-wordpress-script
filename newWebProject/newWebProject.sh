@@ -19,6 +19,8 @@ npm i
 cd /Applications/MAMP/bin && ./start.sh
 cd /Applications/MAMP/bin && ./stop.sh
 
-# TODO Add ssh create table script for mamp
+echo "CREATE DATABASE ${PROJECT};"  | /Applications/MAMP/Library/bin/mysql --host=localhost -uroot -proot
+
+open http://localhost:8887/${PROJECT}/
 
 echo "The ${PROJECT} project has been initiated!"

@@ -28,22 +28,22 @@ version: '3'
 services:
   db:
     image: mysql:latest
-    volumes:
-      - db_data:/var/lib/mysql
-    restart: always
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_USERNAME: root
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: ${PROJECT}_db
       MYSQL_USER: ${PROJECT}
       MYSQL_PASSWORD: root
+    volumes:
+      - ./db_data:/var/lib/mysql
     networks:
       - wpsite
   phpmyadmin:
     depends_on:
       - db
     image: phpmyadmin/phpmyadmin
-    restart: always
+    restart: unless-stopped
     ports:
       - '8080:80'
     environment:
@@ -55,32 +55,38 @@ services:
     depends_on:
       - db
     image: wordpress:latest
+    restart: unless-stopped
     ports:
       - '8000:80'
-    restart: always
-    volumes: ['./:/var/www/html']
     environment:
       WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_NAME: ${PROJECT}_db
       WORDPRESS_DB_USER: ${PROJECT}
       WORDPRESS_DB_PASSWORD: root
+    volumes:
+      - "./files:/var/www/html"
     networks:
       - wpsite
 networks:
   wpsite:
 volumes:
+  files:
   db_data:
 EOF
 echo "$DOCKER_YAML" > docker-compose.yml
 docker-compose up -d
 
-git clone https://github.com/dan-frank/swd_theme ${PATH_PROJECT}/${PATH_WP_THEME}/${PROJECT}
-cd ${PATH_PROJECT}/${PATH_WP_THEME}/${PROJECT}
+git clone https://github.com/dan-frank/swd_theme ${PATH_PROJECT}/files/${PATH_WP_THEME}/${PROJECT}
+cd ${PATH_PROJECT}/files/${PATH_WP_THEME}/${PROJECT}
 npm i
+npm rebuild node-sass
+npm rebuild rimraf
+npm rebuild mkdirp
+npm run prod
 
-rm -rf ${PATH_PROJECT}/${PATH_WP_PLUGINS}/akismet
-rm ${PATH_PROJECT}/${PATH_WP_PLUGINS}/hello.php
-cp -R ${PATH_SCRIPT}/plugins/ ${PATH_PROJECT}/${PATH_WP_PLUGINS}/
+rm -rf ${PATH_PROJECT}/files/${PATH_WP_PLUGINS}/akismet
+rm ${PATH_PROJECT}/files/${PATH_WP_PLUGINS}/hello.php
+cp -R ${PATH_SCRIPT}/plugins/ ${PATH_PROJECT}/files/${PATH_WP_PLUGINS}/
 
 open http://localhost:8000/wp-admin/install.php
 

@@ -1,60 +1,78 @@
-# New Web Project
+# Create Docker WordPress Environment
 
-This script creates a Wordpress Docker instance on your local machine, clones the [tws_theme](https://github.com/TheWebsiteSpace/tws_theme) repository, and sets up the project.
+This script creates a Wordpress Docker instance on your local machine, clones the [swd-theme](https://github.com/dan-frank/swd-theme) (PRIVATE) repository, and sets up the project.
+
+Don't worry, you can still use this theme if you are not on the SWD dev team.
+If you follow the [recommended changes](#recommended-changes) the rest of the instructions will work as described.
+
+---
+**Note**
+
+This script has only been tested on MacOS.
+Use on Linux at your own expense, though likely no issue with minor changes.
+
+Unsupported on Windows.
+
+---
 
 ## Requirements
 
 - [Docker](https://www.docker.com/)
 - [Node.js](https://nodejs.org/en/) (For **Mac** recommended install is via Homebrew, for **Linux** recommended install is via the CLI)
 
+## Recommended Changes
+
+There are a few changes you have to make before running the commands.
+However, all these changes are simple variable manipulations.
+See the following table for instructions.
+
+| Line | Change | Description |
+| ---- | ------ | ----------- |
+| 14 | `GIT_REPO_BASE` | The repo base the projected is located on |
+| 15 | `PATH_SCRIPT` | The location of this script |
+| 16 | `PATH_PROJECT` | The location of your local workspace |
+
 ## Guide
 
 Simply call this script from the CLI to run the script.
 Once run all you need to do is enter the project name (no spaces) and wait until it has completed.
-*Make sure you have cloned [tws_theme](https://github.com/TheWebsiteSpace/tws_theme) and made the project following the same convetion you used when inputting you name.*
 
-## Setup
+---
+**Note**
 
-This script calls and writes files on your local directory and will need to be tweaked for each machine.
+Make sure you have have already prepared your WordPress theme repository on GitHub.
 
-You will need to edit the following variables:
+---
 
-- `PATH_PROJECT` - The location of your local workspace
-- `PATH_SCRIPT` - The localtion of this script
-
-## Exporting DB From MySQL
+## Accessing the Docker MySQL Database
 
 **Make sure the container is running!**
 
-### PHPMyAdmin
+### PHPMyAdmin [BROKEN]
 
 1. Open [localhost:8080](http://localhost:8080/) to connect to PHPMyAdmin.
-1. Click on the database
-1. Click "Export" tab
-1. Select "Quick" export
-1. Press "Go"
-1. Save
+1. Enter login credentials
 
-### Docker Pipe
+### Manipulating Database
 
-Alternatively you can run the following command to pipe the database into an sql file to export.
-
-```
-docker exec CONTAINER_NAME /usr/bin/mysqldump -uroot -proot DATABASE_NAME > ~/Desktop/PROJECT_NAME.sql
-```
-
-You can use the following commands to access the MySQL shell in docker.
+You can use the following commands to access the MySQL shell.
 
 1. `docker exec -it CONTAINER_NAME bash`
 1. `mysql -uroot -proot`
 
-Once inside you can use all your regular MySQL commands such as `SHOW DATABASES;`.
+Once inside you can use all your regular MySQL commands such as `SHOW DATABASES/TABLES;`, `SELECT * FROM table;`, etc.
 
-Use the following key to find the variables listed in the above command.
+### Exporting Database
 
-## Importing Database into MySQL
+You can run the following command to pipe the database into an `.sql` export.
 
-Using the following command you can import an sql file into a MySQL database hosted on Docker.
+```bash
+docker exec CONTAINER_NAME /usr/bin/mysqldump -uroot -proot DATABASE_NAME > ~/Desktop/PROJECT_NAME.sql
+```
+
+### Importing Database into MySQL
+
+Using the following command you can import an `.sql` file into a MySQL database hosted on Docker.
 
 ```bash
 cat backup.sql | docker exec -i CONTAINER_NAME mysql -uuser -ppassword DATABASE_NAME
@@ -62,9 +80,11 @@ cat backup.sql | docker exec -i CONTAINER_NAME mysql -uuser -ppassword DATABASE_
 
 ## Key
 
-The following sub-sections briefly explain how to find unique information that will be different for every project.
+The following sub-sections briefly explain how to find the unique information that will be different for every project.
 
 ### `CONTAINER_NAME`
+
+*While docker container is running*
 
 1. Open Docker App
 1. Click arrow to dropdown all grouped containers

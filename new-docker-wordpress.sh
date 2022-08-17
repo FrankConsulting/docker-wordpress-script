@@ -1,19 +1,21 @@
 ## DOCUMENTATION
 ### RUN
-#`docker compose up -d`
-#> This runs the container
-#`docker compose down`
-#> This stops the container
-#`docker compose down --volumes`
-#> This stops the container and removes docker files
+# `docker compose up -d`
+# > This runs the container
+#
+# `docker compose down`
+# > This stops the container
+#
+# `docker compose down --volumes`
+# > This stops the container and removes docker files
 
 read -p "Enter your project name (no spaces): " PROJECT
 
-PATH_PROJECT="${HOME}/Documents/Projects/wordpress/${PROJECT}"
-PATH_WP="wp-content"
-PATH_WP_THEME="${PATH_WP}/themes"
-PATH_WP_PLUGINS="${PATH_WP}/plugins"
+GIT_REPO_BASE="https://github.com/dan-frank"
 PATH_SCRIPT="${HOME}/Documents/Projects/scripts/new-docker-wordpress"
+PATH_PROJECT="${HOME}/Documents/Projects/wordpress/${PROJECT}"
+PATH_WP_THEME="wp-content/themes"
+PATH_WP_PLUGINS="wp-content/plugins"
 
 mkdir ${PATH_PROJECT}
 cd ${PATH_PROJECT}
@@ -72,7 +74,7 @@ EOF
 echo "$DOCKER_YAML" > docker-compose.yml
 docker-compose up -d
 
-git clone https://github.com/dan-frank/${PROJECT} ${PATH_PROJECT}/files/${PATH_WP_THEME}/${PROJECT}
+git clone ${GIT_REPO_BASE}/${PROJECT} ${PATH_PROJECT}/files/${PATH_WP_THEME}/${PROJECT}
 cd ${PATH_PROJECT}/files/${PATH_WP_THEME}/${PROJECT}
 npm i
 npm rebuild node-sass

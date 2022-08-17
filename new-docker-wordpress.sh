@@ -1,23 +1,19 @@
 ## DOCUMENTATION
 ### RUN
-#`docker-compose up -d`
+#`docker compose up -d`
 #> This runs the container
-#`docker-compose down`
+#`docker compose down`
 #> This stops the container
-#`docker-compose down --volumes`
-#> This stops the container and removes files
-### HELPFUL RESOURCES
-#### Docker
-#- https://www.youtube.com/watch?v=pYhLEV-sRpY
-#-- https://gist.github.com/bradtraversy/faa8de544c62eef3f31de406982f1d42
+#`docker compose down --volumes`
+#> This stops the container and removes docker files
 
 read -p "Enter your project name (no spaces): " PROJECT
 
-PATH_PROJECT="${HOME}/Documents/workspace/web/projects/${PROJECT}"
+PATH_PROJECT="${HOME}/Documents/Projects/wordpress/${PROJECT}"
 PATH_WP="wp-content"
 PATH_WP_THEME="${PATH_WP}/themes"
 PATH_WP_PLUGINS="${PATH_WP}/plugins"
-PATH_SCRIPT="${HOME}/Documents/workspace/scripts/newWebProject"
+PATH_SCRIPT="${HOME}/Documents/Projects/scripts/new-docker-wordpress"
 
 mkdir ${PATH_PROJECT}
 cd ${PATH_PROJECT}
@@ -27,7 +23,7 @@ version: '3'
 
 services:
   db:
-    image: mysql:latest
+    image: mysql/mysql-server:8.0.23
     restart: unless-stopped
     environment:
       MYSQL_ROOT_USERNAME: root
@@ -38,7 +34,7 @@ services:
     volumes:
       - ./db_data:/var/lib/mysql
     networks:
-      - wpsite
+      - ${PROJECT}_wpsite
   phpmyadmin:
     depends_on:
       - db
@@ -50,7 +46,7 @@ services:
       PMA_HOST: db
       MYSQL_ROOT_PASSWORD: root
     networks:
-      - wpsite
+      - ${PROJECT}_wpsite
   wordpress:
     depends_on:
       - db
@@ -66,9 +62,9 @@ services:
     volumes:
       - "./files:/var/www/html"
     networks:
-      - wpsite
+      - ${PROJECT}_wpsite
 networks:
-  wpsite:
+  ${PROJECT}_wpsite:
 volumes:
   files:
   db_data:
@@ -76,13 +72,13 @@ EOF
 echo "$DOCKER_YAML" > docker-compose.yml
 docker-compose up -d
 
-git clone https://github.com/dan-frank/swd_theme ${PATH_PROJECT}/files/${PATH_WP_THEME}/${PROJECT}
+git clone https://github.com/dan-frank/${PROJECT} ${PATH_PROJECT}/files/${PATH_WP_THEME}/${PROJECT}
 cd ${PATH_PROJECT}/files/${PATH_WP_THEME}/${PROJECT}
 npm i
 npm rebuild node-sass
 npm rebuild rimraf
 npm rebuild mkdirp
-npm run prod
+npm run init
 
 rm -rf ${PATH_PROJECT}/files/${PATH_WP_PLUGINS}/akismet
 rm ${PATH_PROJECT}/files/${PATH_WP_PLUGINS}/hello.php
@@ -92,3 +88,4 @@ open http://localhost:8000/wp-admin/install.php
 
 echo "The ${PROJECT} project has been initiated at:"
 echo "${PATH_PROJECT}"
+

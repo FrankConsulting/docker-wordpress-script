@@ -29,6 +29,12 @@ See the following table for instructions.
 | 15 | `PATH_SCRIPT` | The location of this script |
 | 16 | `PATH_PROJECT` | The location of your local workspace |
 
+You will also need to allow this script to be executed with:
+
+```bash
+chmod +x PATH_TO_REPO/new-docker-wordpress.sh
+```
+
 ## Guide
 
 Simply call this script from the CLI to run the script.
@@ -100,4 +106,8 @@ The following sub-sections briefly explain how to find the unique information th
 ### `PROJECT_NAME`
 
 The name of the project, i.e. the name of your project GitHub repository.
+
+### `PATH_TO_REPO`
+
+The location of this cloned repository.
 

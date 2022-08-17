@@ -1,9 +1,6 @@
 # Create Docker WordPress Environment
 
-This script creates a Wordpress Docker instance on your local machine, clones the [swd-theme](https://github.com/dan-frank/swd-theme) (PRIVATE) repository, and sets up the project.
-
-Don't worry, you can still use this theme if you are not on the SWD dev team.
-If you follow the [recommended changes](#recommended-changes) the rest of the instructions will work as described.
+This script creates a Wordpress Docker instance on your local machine, clones your WordPress theme repository, and sets up the project.
 
 ---
 **Note**

@@ -50,7 +50,7 @@ Make sure you have have already prepared your WordPress theme repository on GitH
 1. Open [localhost:8080](http://localhost:8080/) to connect to PHPMyAdmin.
 1. Enter login credentials
 
-### Manipulating Database
+### MySQL Shell
 
 You can use the following commands to access the MySQL shell.
 

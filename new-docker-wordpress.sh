@@ -78,7 +78,7 @@ echo "$DOCKER_YAML" > docker-compose.yml
 docker-compose up -d
 
 # -- Fetch WordPress theme
-git clone ${GIT_REPO_BASE}/${PROJECT} ${PATH_WP_THEME}
+git clone ${GIT_REPO_BASE}/${PROJECT}.git ${PATH_WP_THEME}
 
 # -- Install NPM dependencies & rebuild difficult ones --
 cd ${PATH_WP_THEME}

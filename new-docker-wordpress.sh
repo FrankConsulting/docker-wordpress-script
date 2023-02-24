@@ -11,15 +11,18 @@
 
 read -p "Enter your project name (no spaces): " PROJECT
 
+# -- Declare vars --
 GIT_REPO_BASE="https://github.com/dan-frank"
-PATH_SCRIPT="${HOME}/Documents/Projects/scripts/new-docker-wordpress"
+PATH_SCRIPT="${HOME}/Documents/Projects/Scripts/docker-wordpress-script"
 PATH_PROJECT="${HOME}/Documents/Projects/Wordpress/${PROJECT}"
-PATH_WP_THEME="wp-content/themes"
-PATH_WP_PLUGINS="wp-content/plugins"
+PATH_WP_THEME="${PATH_PROJECT}/files/wp-content/themes/${PROJECT}"
+PATH_WP_THEME="${PATH_PROJECT}/files/wp-content/plugins"
 
+# -- Setup project folders --
 mkdir -p ${PATH_PROJECT}
 cd ${PATH_PROJECT}
 
+# -- Init `docker-compose` file
 read -d '' DOCKER_YAML << EOF
 version: '3'
 
@@ -74,20 +77,25 @@ EOF
 echo "$DOCKER_YAML" > docker-compose.yml
 docker-compose up -d
 
-git clone ${GIT_REPO_BASE}/${PROJECT} ${PATH_PROJECT}/files/${PATH_WP_THEME}/${PROJECT}
-cd ${PATH_PROJECT}/files/${PATH_WP_THEME}/${PROJECT}
+# -- Fetch WordPress theme
+git clone ${GIT_REPO_BASE}/${PROJECT} ${PATH_WP_THEME}
+
+# -- Install NPM dependencies & rebuild difficult ones --
+cd ${PATH_WP_THEME}
+nix develop
 npm i
 npm rebuild node-sass
 npm rebuild rimraf
 npm rebuild mkdirp
 npm run init
 
-rm -rf ${PATH_PROJECT}/files/${PATH_WP_PLUGINS}/akismet
-rm ${PATH_PROJECT}/files/${PATH_WP_PLUGINS}/hello.php
-cp -R ${PATH_SCRIPT}/plugins/ ${PATH_PROJECT}/files/${PATH_WP_PLUGINS}/
+# -- Set common plugins --
+rm -rf ${PATH_WP_PLUGINS}/akismet
+rm ${PATH_WP_PLUGINS}/hello.php
+cp -R ${PATH_SCRIPT}/plugins/ ${PATH_WP_PLUGINS}/
 
+# -- Display project --
 open http://localhost:8000/wp-admin/install.php
-
 echo "The ${PROJECT} project has been initiated at:"
 echo "${PATH_PROJECT}"
 

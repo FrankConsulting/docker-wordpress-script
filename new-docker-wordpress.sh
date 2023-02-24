@@ -13,11 +13,11 @@ read -p "Enter your project name (no spaces): " PROJECT
 
 GIT_REPO_BASE="https://github.com/dan-frank"
 PATH_SCRIPT="${HOME}/Documents/Projects/scripts/new-docker-wordpress"
-PATH_PROJECT="${HOME}/Documents/Projects/wordpress/${PROJECT}"
+PATH_PROJECT="${HOME}/Documents/Projects/Wordpress/${PROJECT}"
 PATH_WP_THEME="wp-content/themes"
 PATH_WP_PLUGINS="wp-content/plugins"
 
-mkdir ${PATH_PROJECT}
+mkdir -p ${PATH_PROJECT}
 cd ${PATH_PROJECT}
 
 read -d '' DOCKER_YAML << EOF

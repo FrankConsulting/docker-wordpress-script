@@ -16,7 +16,7 @@ GIT_REPO_BASE="https://github.com/dan-frank"
 PATH_SCRIPT="${HOME}/Documents/Projects/Scripts/docker-wordpress-script"
 PATH_PROJECT="${HOME}/Documents/Projects/Wordpress/${PROJECT}"
 PATH_WP_THEME="${PATH_PROJECT}/files/wp-content/themes/${PROJECT}"
-PATH_WP_THEME="${PATH_PROJECT}/files/wp-content/plugins"
+PATH_WP_PLUGINS="${PATH_PROJECT}/files/wp-content/plugins"
 
 # -- Setup project folders --
 mkdir -p ${PATH_PROJECT}
@@ -78,16 +78,7 @@ echo "$DOCKER_YAML" > docker-compose.yml
 docker-compose up -d
 
 # -- Fetch WordPress theme
-git clone ${GIT_REPO_BASE}/${PROJECT}.git ${PATH_WP_THEME}
-
-# -- Install NPM dependencies & rebuild difficult ones --
-cd ${PATH_WP_THEME}
-nix develop
-npm i
-npm rebuild node-sass
-npm rebuild rimraf
-npm rebuild mkdirp
-npm run init
+git clone ${GIT_REPO_BASE}/${PROJECT} ${PATH_WP_THEME}
 
 # -- Set common plugins --
 rm -rf ${PATH_WP_PLUGINS}/akismet
@@ -98,4 +89,8 @@ cp -R ${PATH_SCRIPT}/plugins/ ${PATH_WP_PLUGINS}/
 open http://localhost:8000/wp-admin/install.php
 echo "The ${PROJECT} project has been initiated at:"
 echo "${PATH_PROJECT}"
+
+# -- Call Nix dev shell --
+cd ${PATH_WP_THEME}
+nix develop
 

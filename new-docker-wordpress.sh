@@ -12,7 +12,7 @@
 read -p "Enter your project name (no spaces): " PROJECT
 
 # -- Declare vars --
-GIT_REPO_BASE="https://github.com/dan-frank"
+GIT_REPO_BASE="https://github.com/FrankConsulting"
 PATH_SCRIPT="${HOME}/Documents/Projects/Scripts/docker-wordpress-script"
 PATH_PROJECT="${HOME}/Documents/Projects/Wordpress/${PROJECT}"
 PATH_WP_THEME="${PATH_PROJECT}/files/wp-content/themes/${PROJECT}"
@@ -55,7 +55,7 @@ services:
   wordpress:
     depends_on:
       - db
-    image: wordpress:latest
+    image: wordpress:6.0-php8.1-apache
     restart: unless-stopped
     ports:
       - '8000:80'
